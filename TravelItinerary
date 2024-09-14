@@ -1,0 +1,175 @@
+package codealpha;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Destination {
+	private String name;
+	private String startDate;
+	private String endDate;
+	private String preferences;
+	private double budget;
+
+	public Destination(String name, String startDate, String endDate, String preferences, double budget) {
+		this.name = name;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.preferences = preferences;
+		this.budget = budget;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public String getPreferences() {
+		return preferences;
+	}
+
+	public double getBudget() {
+		return budget;
+	}
+
+	public void setPreferences(String preferences) {
+		this.preferences = preferences;
+	}
+
+	public void setBudget(double budget) {
+		this.budget = budget;
+	}
+
+	@Override
+	public String toString() {
+		return "Destination: " + name + "\nStart Date: " + startDate + "\nEnd Date: " + endDate + "\nPreferences: "
+				+ preferences + "\nBudget: $" + budget;
+	}
+}
+
+public class TravelItineraryPlanner {
+	private ArrayList<Destination> destinations;
+
+	public TravelItineraryPlanner() {
+		destinations = new ArrayList<>();
+	}
+
+	// Method to add a destination
+	public void addDestination(Destination destination) {
+		destinations.add(destination);
+		System.out.println("Destination added successfully.");
+	}
+
+	// Method to remove a destination
+	public void removeDestination(String name) {
+		for (int i = 0; i < destinations.size(); i++) {
+			if (destinations.get(i).getName().equalsIgnoreCase(name)) {
+				destinations.remove(i);
+				System.out.println("Destination removed successfully.");
+				return;
+			}
+		}
+		System.out.println("Destination not found.");
+	}
+
+	// Method to edit a destination's preferences or budget
+	public void editDestination(String name, String newPreferences, double newBudget) {
+		for (Destination destination : destinations) {
+			if (destination.getName().equalsIgnoreCase(name)) {
+				destination.setPreferences(newPreferences);
+				destination.setBudget(newBudget);
+				System.out.println("Destination updated successfully.");
+				return;
+			}
+		}
+		System.out.println("Destination not found.");
+	}
+
+	// Method to view the full itinerary
+	public void viewItinerary() {
+		if (destinations.isEmpty()) {
+			System.out.println("No destinations added yet.");
+			return;
+		}
+		for (Destination destination : destinations) {
+			System.out.println(destination);
+			System.out.println("---------------");
+		}
+	}
+
+	// Method to calculate total budget
+	public double calculateTotalBudget() {
+		double totalBudget = 0;
+		for (Destination destination : destinations) {
+			totalBudget += destination.getBudget();
+		}
+		return totalBudget;
+	}
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		TravelItineraryPlanner planner = new TravelItineraryPlanner();
+
+		System.out.println("Welcome to the Travel Itinerary Planner");
+
+		while (true) {
+			System.out.println("\nOptions:");
+			System.out.println("1. Add Destination");
+			System.out.println("2. Remove Destination");
+			System.out.println("3. Edit Destination");
+			System.out.println("4. View Itinerary");
+			System.out.println("5. Calculate Total Budget");
+			System.out.println("6. Exit");
+			System.out.print("Choose an option: ");
+			int option = scanner.nextInt();
+			scanner.nextLine(); // Consume newline
+
+			switch (option) {
+			case 1:
+				System.out.print("Enter destination name: ");
+				String name = scanner.nextLine();
+				System.out.print("Enter start date (YYYY-MM-DD): ");
+				String startDate = scanner.nextLine();
+				System.out.print("Enter end date (YYYY-MM-DD): ");
+				String endDate = scanner.nextLine();
+				System.out.print("Enter preferences (e.g., activities, accommodations): ");
+				String preferences = scanner.nextLine();
+				System.out.print("Enter budget: $");
+				double budget = scanner.nextDouble();
+				planner.addDestination(new Destination(name, startDate, endDate, preferences, budget));
+				break;
+			case 2:
+				System.out.print("Enter the name of the destination to remove: ");
+				String removeName = scanner.nextLine();
+				planner.removeDestination(removeName);
+				break;
+			case 3:
+				System.out.print("Enter the name of the destination to edit: ");
+				String editName = scanner.nextLine();
+				System.out.print("Enter new preferences: ");
+				String newPreferences = scanner.nextLine();
+				System.out.print("Enter new budget: $");
+				double newBudget = scanner.nextDouble();
+				planner.editDestination(editName, newPreferences, newBudget);
+				break;
+			case 4:
+				planner.viewItinerary();
+				break;
+			case 5:
+				System.out.println("Total budget for the trip: $" + planner.calculateTotalBudget());
+				break;
+			case 6:
+				System.out.println("Exiting the Travel Itinerary Planner. Have a great trip!");
+				return;
+			default:
+				System.out.println("Invalid option. Please choose again.");
+			}
+		}
+	}
+} 
