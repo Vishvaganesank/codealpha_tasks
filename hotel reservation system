@@ -1,0 +1,222 @@
+package codealpha;
+
+	import java.util.ArrayList;
+	import java.util.Scanner;
+
+	class Room {
+	    private int roomNumber;
+	    private String roomType;
+	    private double pricePerNight;
+	    private boolean isAvailable;
+
+	    public Room(int roomNumber, String roomType, double pricePerNight) {
+	        this.roomNumber = roomNumber;
+	        this.roomType = roomType;
+	        this.pricePerNight = pricePerNight;
+	        this.isAvailable = true;
+	    }
+
+	    public int getRoomNumber() {
+	        return roomNumber;
+	    }
+
+	    public String getRoomType() {
+	        return roomType;
+	    }
+
+	    public double getPricePerNight() {
+	        return pricePerNight;
+	    }
+
+	    public boolean isAvailable() {
+	        return isAvailable;
+	    }
+
+	    public void setAvailable(boolean available) {
+	        isAvailable = available;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return "Room Number: " + roomNumber + ", Type: " + roomType + ", Price per Night: $" + pricePerNight + ", Available: " + isAvailable;
+	    }
+	}
+
+	class Reservation {
+	    private Room room;
+	    private String customerName;
+	    private String checkInDate;
+	    private String checkOutDate;
+	    private double totalCost;
+
+	    public Reservation(Room room, String customerName, String checkInDate, String checkOutDate, double totalCost) {
+	        this.room = room;
+	        this.customerName = customerName;
+	        this.checkInDate = checkInDate;
+	        this.checkOutDate = checkOutDate;
+	        this.totalCost = totalCost;
+	    }
+
+	    public Room getRoom() {
+	        return room;
+	    }
+
+	    public String getCustomerName() {
+	        return customerName;
+	    }
+
+	    public String getCheckInDate() {
+	        return checkInDate;
+	    }
+
+	    public String getCheckOutDate() {
+	        return checkOutDate;
+	    }
+
+	    public double getTotalCost() {
+	        return totalCost;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return "Reservation for " + customerName + "\nRoom: " + room.getRoomType() + " (Room " + room.getRoomNumber() + ")\nCheck-in Date: " + checkInDate + "\nCheck-out Date: " + checkOutDate + "\nTotal Cost: $" + totalCost;
+	    }
+	}
+
+	public class HotelReservationSystem {
+	    private ArrayList<Room> rooms;
+	    private ArrayList<Reservation> reservations;
+
+	    public HotelReservationSystem() {
+	        rooms = new ArrayList<>();
+	        reservations = new ArrayList<>();
+	        initializeRooms();
+	    }
+
+	    // Initialize some rooms in the hotel
+	    private void initializeRooms() {
+	        rooms.add(new Room(101, "Standard", 100.0));
+	        rooms.add(new Room(102, "Standard", 100.0));
+	        rooms.add(new Room(201, "Deluxe", 150.0));
+	        rooms.add(new Room(202, "Deluxe", 150.0));
+	        rooms.add(new Room(301, "Suite", 200.0));
+	        rooms.add(new Room(302, "Suite", 200.0));
+	    }
+
+	    // Method to search for available rooms
+	    public void searchRooms(String roomType) {
+	        boolean found = false;
+	        for (Room room : rooms) {
+	            if (room.getRoomType().equalsIgnoreCase(roomType) && room.isAvailable()) {
+	                System.out.println(room);
+	                found = true;
+	            }
+	        }
+	        if (!found) {
+	            System.out.println("No available rooms of type: " + roomType);
+	        }
+	    }
+
+	    // Method to make a reservation
+	    public void makeReservation(String customerName, String roomType, String checkInDate, String checkOutDate) {
+	        for (Room room : rooms) {
+	            if (room.getRoomType().equalsIgnoreCase(roomType) && room.isAvailable()) {
+	                double totalCost = calculateTotalCost(room.getPricePerNight(), checkInDate, checkOutDate);
+	                reservations.add(new Reservation(room, customerName, checkInDate, checkOutDate, totalCost));
+	                room.setAvailable(false);
+	                System.out.println("Reservation made successfully.");
+	                return;
+	            }
+	        }
+	        System.out.println("No available rooms of type: " + roomType + " for the selected dates.");
+	    }
+
+	    // Method to calculate the total cost of the reservation
+	    private double calculateTotalCost(double pricePerNight, String checkInDate, String checkOutDate) {
+	        // Simplified cost calculation assuming 1 night per day difference
+	        // In a real-world scenario, date parsing and difference calculation would be more complex
+	        return pricePerNight * 1; // Assume 1 night for simplicity
+	    }
+
+	    // Method to view booking details
+	    public void viewReservations(String customerName) {
+	        boolean found = false;
+	        for (Reservation reservation : reservations) {
+	            if (reservation.getCustomerName().equalsIgnoreCase(customerName)) {
+	                System.out.println(reservation);
+	                found = true;
+	            }
+	        }
+	        if (!found) {
+	            System.out.println("No reservations found for customer: " + customerName);
+	        }
+	    }
+
+	    // Simulate payment processing
+	    public void processPayment(String customerName) {
+	        for (Reservation reservation : reservations) {
+	            if (reservation.getCustomerName().equalsIgnoreCase(customerName)) {
+	                System.out.println("Processing payment for " + customerName + " for amount $" + reservation.getTotalCost());
+	                System.out.println("Payment successful.");
+	                return;
+	            }
+	        }
+	        System.out.println("No reservations found for customer: " + customerName);
+	    }
+
+	    public static void main(String[] args) {
+	        Scanner scanner = new Scanner(System.in);
+	        HotelReservationSystem system = new HotelReservationSystem();
+
+	        System.out.println("Welcome to the Hotel Reservation System");
+
+	        while (true) {
+	            System.out.println("\nOptions:");
+	            System.out.println("1. Search Rooms");
+	            System.out.println("2. Make Reservation");
+	            System.out.println("3. View Reservations");
+	            System.out.println("4. Process Payment");
+	            System.out.println("5. Exit");
+	            System.out.print("Choose an option: ");
+	            int option = scanner.nextInt();
+	            scanner.nextLine(); // Consume newline
+
+	            switch (option) {
+	                case 1:
+	                    System.out.print("Enter room type to search (Standard, Deluxe, Suite): ");
+	                    String roomType = scanner.nextLine();
+	                    system.searchRooms(roomType);
+	                    break;
+	                case 2:
+	                    System.out.print("Enter your name: ");
+	                    String name = scanner.nextLine();
+	                    System.out.print("Enter room type (Standard, Deluxe, Suite): ");
+	                    roomType = scanner.nextLine();
+	                    System.out.print("Enter check-in date (YYYY-MM-DD): ");
+	                    String checkInDate = scanner.nextLine();
+	                    System.out.print("Enter check-out date (YYYY-MM-DD): ");
+	                    String checkOutDate = scanner.nextLine();
+	                    system.makeReservation(name, roomType, checkInDate, checkOutDate);
+	                    break;
+	                case 3:
+	                    System.out.print("Enter your name to view reservations: ");
+	                    name = scanner.nextLine();
+	                    system.viewReservations(name);
+	                    break;
+	                case 4:
+	                    System.out.print("Enter your name to process payment: ");
+	                    name = scanner.nextLine();
+	                    system.processPayment(name);
+	                    break;
+	                case 5:
+	                    System.out.println("Exiting the Hotel Reservation System.");
+	                    return;
+	                default:
+	                    System.out.println("Invalid option. Please choose again.");
+	            }
+	        }
+	    }
+	}
+
+
+
