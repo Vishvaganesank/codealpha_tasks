@@ -1,0 +1,80 @@
+package codealpha;
+
+	import java.util.Scanner;
+
+	public class SimpleBankingApplication {
+	    private double balance;
+
+	    public SimpleBankingApplication() {
+	        balance = 0.0;  // Initial balance set to 0
+	    }
+
+	    // Method to check the balance
+	    public double checkBalance() {
+	        return balance;
+	    }
+
+	    // Method to deposit money
+	    public void deposit(double amount) {
+	        if (amount > 0) {
+	            balance += amount;
+	            System.out.println("Deposit successful. Your new balance is $" + balance);
+	        } else {
+	            System.out.println("Invalid deposit amount. Please enter a positive number.");
+	        }
+	    }
+
+	    // Method to withdraw money
+	    public void withdraw(double amount) {
+	        if (amount > 0 && amount <= balance) {
+	            balance -= amount;
+	            System.out.println("Withdrawal successful. Your new balance is $" + balance);
+	        } else if (amount > balance) {
+	            System.out.println("Insufficient funds. Your balance is $" + balance);
+	        } else {
+	            System.out.println("Invalid withdrawal amount. Please enter a positive number.");
+	        }
+	    }
+
+	    // Main method to run the application
+	    public static void main(String[] args) {
+	        Scanner scanner = new Scanner(System.in);
+	        SimpleBankingApplication bank = new SimpleBankingApplication();
+
+	        System.out.println("Welcome to the Simple Banking Application");
+
+	        while (true) {
+	            System.out.println("\nOptions:");
+	            System.out.println("1. Check Balance");
+	            System.out.println("2. Deposit Money");
+	            System.out.println("3. Withdraw Money");
+	            System.out.println("4. Exit");
+	            System.out.print("Choose an option: ");
+	            int option = scanner.nextInt();
+
+	            switch (option) {
+	                case 1:
+	                    System.out.println("Your current balance is $" + bank.checkBalance());
+	                    break;
+	                case 2:
+	                    System.out.print("Enter the amount to deposit: $");
+	                    double depositAmount = scanner.nextDouble();
+	                    bank.deposit(depositAmount);
+	                    break;
+	                case 3:
+	                    System.out.print("Enter the amount to withdraw: $");
+	                    double withdrawAmount = scanner.nextDouble();
+	                    bank.withdraw(withdrawAmount);
+	                    break;
+	                case 4:
+	                    System.out.println("Thank you for using the Simple Banking Application. Goodbye!");
+	                    return;
+	                default:
+	                    System.out.println("Invalid option. Please choose again.");
+	            }
+	        }
+	    }
+	}
+
+
+
